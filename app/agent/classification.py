@@ -1,7 +1,7 @@
 import json
 import base64
 from io import BytesIO
-from typing import List, BinaryIO
+from typing import List
 
 from app.agent.base import BaseAgent
 
@@ -18,7 +18,7 @@ class ClassificationAgent(BaseAgent):
         self.sp = "You are an helpful AI Visual Assistant"
         self.max_tokens = max([len(category) for category in self.categories]) + 32
 
-    def classify_content(
+    async def classify_content(
         self,
         texts: List[str] = [],
         images: List[BytesIO] = [],
@@ -66,7 +66,7 @@ class ClassificationAgent(BaseAgent):
             {"role": "user", "content": content},
         ]
 
-        response = self.client.beta.chat.completions.parse(
+        response = await self.client.beta.chat.completions.parse(
             messages=messages,
             model=self.model_id,
             max_tokens=self.max_tokens,

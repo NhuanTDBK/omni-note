@@ -32,6 +32,10 @@ class Settings(BaseSettings):
     AGENT_EXTRACTOR_LLM_API_KEY: str = "1234"
     AGENT_EXTRACTOR_LLM_MODEL: str = "qwen2.5-vl-7b-instruct"
 
+    AGENT_SUMMARIZATION_LLM_URL: str = "http://localhost:1234/v1"
+    AGENT_SUMMARIZATION_LLM_API_KEY: str = "1234"
+    AGENT_SUMMARIZATION_LLM_MODEL: str = "qwen2.5-14b-instruct-mlx"
+
 
 @lru_cache()
 def get_settings():
