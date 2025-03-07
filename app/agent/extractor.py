@@ -64,7 +64,7 @@ class MetadataExtractor(BaseAgent):
         else:
             raise ValueError("Schema must be a dict or a Pydantic model")
 
-    def extract_metadata(
+    async def extract_metadata(
         self,
         texts: List[str],
         images: List[str] = [],
@@ -109,7 +109,7 @@ class MetadataExtractor(BaseAgent):
             },
             {"role": "user", "content": content},
         ]
-        response = self.client.beta.chat.completions.parse(
+        response = await self.client.beta.chat.completions.parse(
             messages=messages,
             model=self.model_id,
             max_tokens=self.max_tokens,

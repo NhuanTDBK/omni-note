@@ -19,3 +19,8 @@ app.include_router(api_router, prefix="/api/v1")
 @app.get("/")
 async def root():
     return {"message": "Welcome to Omni Note App API"}
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    print("Shutting down...")
+    # Close any resources here
