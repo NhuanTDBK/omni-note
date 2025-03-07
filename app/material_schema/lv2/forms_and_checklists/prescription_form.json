@@ -1,0 +1,177 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MedicalPrescription",
+  "type": "object",
+  "properties": {
+    "documentInfo": {
+      "type": "object",
+      "properties": {
+        "documentType": {
+          "type": "string",
+          "enum": ["Prescription", "Medical Order", "Discharge Medication"]
+        },
+        "prescriptionNumber": { "type": "string" },
+        "issuanceDate": { "type": "string", "format": "date" },
+        "issuanceTime": { "type": "string", "format": "time" },
+        "expirationDate": { "type": "string", "format": "date" },
+        "validityPeriod": { "type": "string" },
+        "barcode": { "type": "string" },
+        "qrCode": { "type": "string" }
+      }
+    },
+    "medicalFacility": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "department": { "type": "string" },
+        "address": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "website": { "type": "string", "format": "uri" },
+        "logo": { "type": "string" }
+      }
+    },
+    "physician": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "title": { "type": "string" },
+        "specialization": { "type": "string" },
+        "licenseNumber": { "type": "string" },
+        "contactInfo": { "type": "string" },
+        "signature": { "type": "boolean" },
+        "digitalSignatureInfo": { "type": "string" }
+      }
+    },
+    "patient": {
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string" },
+        "medicalRecordNumber": { "type": "string" },
+        "dateOfBirth": { "type": "string", "format": "date" },
+        "age": { "type": "string" },
+        "gender": { "type": "string" },
+        "weight": { "type": "string" },
+        "height": { "type": "string" },
+        "address": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "insuranceInfo": { "type": "string" },
+        "allergies": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "guardian": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "relationship": { "type": "string" },
+        "contactInfo": { "type": "string" }
+      }
+    },
+    "diagnosis": {
+      "type": "object",
+      "properties": {
+        "preliminaryDiagnosis": { "type": "string" },
+        "confirmedDiagnosis": { "type": "string" },
+        "icd10Code": { "type": "string" },
+        "condition": { "type": "string" }
+      }
+    },
+    "medications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "orderNumber": { "type": "string" },
+          "name": { "type": "string" },
+          "genericName": { "type": "string" },
+          "brandName": { "type": "string" },
+          "formulation": { "type": "string" },
+          "strength": { "type": "string" },
+          "dosage": { "type": "string" },
+          "unit": { "type": "string" },
+          "frequency": { "type": "string" },
+          "route": { "type": "string" },
+          "timing": { "type": "string" },
+          "duration": { "type": "string" },
+          "quantity": { "type": "string" },
+          "refills": { "type": "string" },
+          "specialInstructions": { "type": "string" },
+          "sideEffects": { "type": "string" },
+          "substitutionAllowed": { "type": "boolean" }
+        }
+      }
+    },
+    "instructions": {
+      "type": "object",
+      "properties": {
+        "generalNotes": { "type": "string" },
+        "dietaryRestrictions": { "type": "string" },
+        "activityRestrictions": { "type": "string" },
+        "followUpInstructions": { "type": "string" },
+        "warningSymptoms": { "type": "string" },
+        "emergencyContact": { "type": "string" }
+      }
+    },
+    "labTests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "testName": { "type": "string" },
+          "testCode": { "type": "string" },
+          "scheduledDate": { "type": "string", "format": "date" },
+          "fasting": { "type": "boolean" },
+          "specialPreparations": { "type": "string" }
+        }
+      }
+    },
+    "pharmacyInfo": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "fillDate": { "type": "string", "format": "date" },
+        "pharmacistInitials": { "type": "string" }
+      }
+    },
+    "billing": {
+      "type": "object",
+      "properties": {
+        "insuranceCoverage": { "type": "boolean" },
+        "copayAmount": { "type": "string" },
+        "billingCodes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "additionalServices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "serviceName": { "type": "string" },
+          "serviceCode": { "type": "string" },
+          "scheduledDate": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "digitalFeatures": {
+      "type": "object",
+      "properties": {
+        "electronicPrescriptionID": { "type": "string" },
+        "eprescribingSystem": { "type": "string" },
+        "verificationMethod": { "type": "string" },
+        "securityFeatures": { "type": "array", "items": { "type": "string" } },
+        "telehealthIndicator": { "type": "boolean" }
+      }
+    },
+    "regulatoryInfo": {
+      "type": "object",
+      "properties": {
+        "controlledSubstanceSchedule": { "type": "string" },
+        "prescriptionLimitations": { "type": "string" },
+        "specialAuthorizationCodes": { "type": "string" },
+        "legalDisclaimer": { "type": "string" }
+      }
+    }
+  }
+}
