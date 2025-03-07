@@ -1,0 +1,246 @@
+{
+  "$defs": {
+    "Discount": {
+      "properties": {
+        "discount_code": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Discount Code"
+        },
+        "discount_description": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Discount Description"
+        },
+        "discount_amount": { "title": "Discount Amount", "type": "number" },
+        "applicable_items": {
+          "anyOf": [
+            { "items": { "type": "string" }, "type": "array" },
+            { "type": "null" }
+          ],
+          "default": null,
+          "title": "Applicable Items"
+        }
+      },
+      "required": ["discount_amount"],
+      "title": "Discount",
+      "type": "object"
+    },
+    "Payment": {
+      "properties": {
+        "method": { "title": "Method", "type": "string" },
+        "amount_paid": { "title": "Amount Paid", "type": "number" },
+        "change_returned": {
+          "anyOf": [{ "type": "number" }, { "type": "null" }],
+          "default": null,
+          "title": "Change Returned"
+        },
+        "transaction_id": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Transaction Id"
+        }
+      },
+      "required": ["method", "amount_paid"],
+      "title": "Payment",
+      "type": "object"
+    },
+    "ProductItem": {
+      "properties": {
+        "name": { "title": "Name", "type": "string" },
+        "barcode": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Barcode"
+        },
+        "unit_price": { "title": "Unit Price", "type": "number" },
+        "quantity": { "title": "Quantity", "type": "number" },
+        "total_price": { "title": "Total Price", "type": "number" },
+        "discount_applied": {
+          "anyOf": [{ "type": "number" }, { "type": "null" }],
+          "default": null,
+          "title": "Discount Applied"
+        },
+        "product_code": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Product Code"
+        },
+        "weight": {
+          "anyOf": [{ "type": "number" }, { "type": "null" }],
+          "default": null,
+          "title": "Weight"
+        },
+        "weight_unit": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Weight Unit"
+        },
+        "department": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Department"
+        }
+      },
+      "required": ["name", "unit_price", "quantity", "total_price"],
+      "title": "ProductItem",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "store_name": { "title": "Store Name", "type": "string" },
+    "store_branch": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Store Branch"
+    },
+    "address": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Address"
+    },
+    "phone_number": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Phone Number"
+    },
+    "website": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Website"
+    },
+    "tax_identification": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Tax Identification"
+    },
+    "receipt_number": { "title": "Receipt Number", "type": "string" },
+    "cashier_id": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Cashier Id"
+    },
+    "register_number": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Register Number"
+    },
+    "checkout_counter": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Checkout Counter"
+    },
+    "date": { "format": "date-time", "title": "Date", "type": "string" },
+    "time": { "format": "time", "title": "Time", "type": "string" },
+    "items": {
+      "items": { "$ref": "#/$defs/ProductItem" },
+      "title": "Items",
+      "type": "array"
+    },
+    "subtotal": { "title": "Subtotal", "type": "number" },
+    "total_discounts": { "title": "Total Discounts", "type": "number" },
+    "discounts": {
+      "items": { "$ref": "#/$defs/Discount" },
+      "title": "Discounts",
+      "type": "array"
+    },
+    "tax_amount": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Tax Amount"
+    },
+    "tax_percentage": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Tax Percentage"
+    },
+    "tax_included": {
+      "default": false,
+      "title": "Tax Included",
+      "type": "boolean"
+    },
+    "total_amount": { "title": "Total Amount", "type": "number" },
+    "currency": { "title": "Currency", "type": "string" },
+    "payment": { "$ref": "#/$defs/Payment" },
+    "loyalty_card_number": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Loyalty Card Number"
+    },
+    "points_earned": {
+      "anyOf": [{ "type": "integer" }, { "type": "null" }],
+      "default": null,
+      "title": "Points Earned"
+    },
+    "points_balance": {
+      "anyOf": [{ "type": "integer" }, { "type": "null" }],
+      "default": null,
+      "title": "Points Balance"
+    },
+    "receipt_message": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Receipt Message"
+    },
+    "return_policy": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Return Policy"
+    },
+    "promotional_offers": {
+      "anyOf": [
+        { "items": { "type": "string" }, "type": "array" },
+        { "type": "null" }
+      ],
+      "default": null,
+      "title": "Promotional Offers"
+    },
+    "barcode": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Barcode"
+    },
+    "qr_code": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Qr Code"
+    },
+    "store_category": {
+      "default": "Grocery/Supermarket",
+      "title": "Store Category",
+      "type": "string"
+    },
+    "shopping_time_category": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Shopping Time Category"
+    },
+    "total_item_count": { "title": "Total Item Count", "type": "integer" },
+    "average_item_price": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Average Item Price"
+    },
+    "discount_percentage": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Discount Percentage"
+    }
+  },
+  "required": [
+    "store_name",
+    "receipt_number",
+    "date",
+    "time",
+    "items",
+    "subtotal",
+    "total_discounts",
+    "discounts",
+    "total_amount",
+    "currency",
+    "payment",
+    "total_item_count"
+  ],
+  "title": "GroceryReceipt",
+  "type": "object"
+}

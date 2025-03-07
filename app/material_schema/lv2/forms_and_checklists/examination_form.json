@@ -1,0 +1,320 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MedicalExaminationForm",
+  "type": "object",
+  "properties": {
+    "documentInfo": {
+      "type": "object",
+      "properties": {
+        "formType": {
+          "type": "string",
+          "enum": [
+            "Regular Examination",
+            "Annual Check-up",
+            "Specialist Consultation",
+            "Follow-up Visit"
+          ]
+        },
+        "formId": { "type": "string" },
+        "barcode": { "type": "string" },
+        "qrCode": { "type": "string" },
+        "examinationDate": { "type": "string", "format": "date-time" },
+        "examRequestType": { "type": "string" },
+        "department": { "type": "string" },
+        "roomNumber": { "type": "string" },
+        "printInfo": {
+          "type": "object",
+          "properties": {
+            "printedBy": { "type": "string" },
+            "printTime": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "medicalFacility": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "phoneNumbers": { "type": "array", "items": { "type": "string" } },
+        "email": { "type": "string" },
+        "website": { "type": "string" },
+        "logo": { "type": "string" },
+        "specialServices": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "patientInfo": {
+      "type": "object",
+      "properties": {
+        "medicalRecordNumber": { "type": "string" },
+        "fullName": { "type": "string" },
+        "dateOfBirth": { "type": "string", "format": "date" },
+        "age": { "type": "string" },
+        "gender": { "type": "string" },
+        "nationality": { "type": "string" },
+        "ethnicGroup": { "type": "string" },
+        "occupation": { "type": "string" },
+        "employerInfo": { "type": "string" },
+        "address": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "email": { "type": "string" },
+        "emergencyContact": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "relationship": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "insuranceInfo": {
+          "type": "object",
+          "properties": {
+            "provider": { "type": "string" },
+            "policyNumber": { "type": "string" },
+            "coverageType": { "type": "string" },
+            "validUntil": { "type": "string", "format": "date" }
+          }
+        }
+      }
+    },
+    "guardian": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "relationship": { "type": "string" },
+        "address": { "type": "string" },
+        "contactPhone": { "type": "string" }
+      }
+    },
+    "vitalSigns": {
+      "type": "object",
+      "properties": {
+        "height": { "type": "string" },
+        "weight": { "type": "string" },
+        "bodyMassIndex": { "type": "string" },
+        "bmiClassification": { "type": "string" },
+        "temperature": { "type": "string" },
+        "pulseRate": { "type": "string" },
+        "respiratoryRate": { "type": "string" },
+        "bloodPressure": { "type": "string" },
+        "oxygenSaturation": { "type": "string" },
+        "painScore": { "type": "string" },
+        "headCircumference": { "type": "string" },
+        "waistCircumference": { "type": "string" },
+        "growthPercentiles": {
+          "type": "object",
+          "properties": {
+            "heightForAge": { "type": "string" },
+            "weightForAge": { "type": "string" },
+            "weightForHeight": { "type": "string" },
+            "bmiForAge": { "type": "string" }
+          }
+        }
+      }
+    },
+    "reasonForVisit": { "type": "string" },
+    "chiefComplaints": { "type": "array", "items": { "type": "string" } },
+    "presentingSymptoms": { "type": "string" },
+    "medicalHistory": {
+      "type": "object",
+      "properties": {
+        "pastMedicalHistory": { "type": "string" },
+        "familyHistory": { "type": "string" },
+        "allergies": { "type": "array", "items": { "type": "string" } },
+        "medications": { "type": "array", "items": { "type": "string" } },
+        "surgicalHistory": { "type": "array", "items": { "type": "string" } },
+        "immunizationStatus": { "type": "string" },
+        "menstrualHistory": { "type": "string" },
+        "obstetricHistory": { "type": "string" },
+        "developmentalHistory": { "type": "string" },
+        "socialHistory": {
+          "type": "object",
+          "properties": {
+            "smoking": { "type": "string" },
+            "alcohol": { "type": "string" },
+            "drugs": { "type": "string" },
+            "exercise": { "type": "string" },
+            "diet": { "type": "string" },
+            "sleep": { "type": "string" },
+            "occupation": { "type": "string" }
+          }
+        }
+      }
+    },
+    "physicalExamination": {
+      "type": "object",
+      "properties": {
+        "generalAppearance": { "type": "string" },
+        "mentalStatus": { "type": "string" },
+        "skin": { "type": "string" },
+        "heent": { "type": "string" },
+        "neck": { "type": "string" },
+        "lymphNodes": { "type": "string" },
+        "chest": { "type": "string" },
+        "lungs": { "type": "string" },
+        "cardiovascular": { "type": "string" },
+        "abdomen": { "type": "string" },
+        "genitourinary": { "type": "string" },
+        "rectalExam": { "type": "string" },
+        "extremities": { "type": "string" },
+        "musculoskeletal": { "type": "string" },
+        "neurologicalExam": { "type": "string" },
+        "specialtySpecificExams": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "laboratoryResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "testName": { "type": "string" },
+          "testDate": { "type": "string", "format": "date" },
+          "result": { "type": "string" },
+          "referenceRange": { "type": "string" },
+          "interpretation": { "type": "string" },
+          "abnormal": { "type": "boolean" }
+        }
+      }
+    },
+    "imaging": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "studyType": { "type": "string" },
+          "bodyPart": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "findings": { "type": "string" },
+          "impression": { "type": "string" }
+        }
+      }
+    },
+    "diagnosis": {
+      "type": "object",
+      "properties": {
+        "provisionalDiagnosis": { "type": "string" },
+        "differentialDiagnosis": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "confirmedDiagnosis": { "type": "string" },
+        "icdCodes": { "type": "array", "items": { "type": "string" } },
+        "severity": { "type": "string" },
+        "stage": { "type": "string" },
+        "comorbidities": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "treatment": {
+      "type": "object",
+      "properties": {
+        "treatmentPlan": { "type": "string" },
+        "proceduresPerformed": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "medications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "dosage": { "type": "string" },
+              "route": { "type": "string" },
+              "frequency": { "type": "string" },
+              "duration": { "type": "string" },
+              "instructions": { "type": "string" },
+              "prescriptionNumber": { "type": "string" }
+            }
+          }
+        },
+        "referrals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "specialty": { "type": "string" },
+              "reason": { "type": "string" },
+              "urgency": { "type": "string" }
+            }
+          }
+        },
+        "preventiveCare": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "properties": {
+        "dietaryAdvice": { "type": "string" },
+        "physicalActivityGuidance": { "type": "string" },
+        "lifestyleModifications": { "type": "string" },
+        "followUpInstructions": { "type": "string" },
+        "warningSymptoms": { "type": "string" },
+        "expectedOutcomes": { "type": "string" },
+        "patientEducationProvided": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "followUp": {
+      "type": "object",
+      "properties": {
+        "nextAppointmentDate": { "type": "string", "format": "date" },
+        "followUpTimeframe": { "type": "string" },
+        "specialInstructions": { "type": "string" },
+        "monitoringPlan": { "type": "string" },
+        "requiresSpecializedCare": { "type": "boolean" }
+      }
+    },
+    "consentDeclarations": {
+      "type": "object",
+      "properties": {
+        "informationAccuracy": { "type": "boolean" },
+        "treatmentConsent": { "type": "boolean" },
+        "dataUsageConsent": { "type": "boolean" },
+        "patientSignature": { "type": "boolean" },
+        "guardianSignature": { "type": "boolean" },
+        "signatureDate": { "type": "string", "format": "date" }
+      }
+    },
+    "providerInfo": {
+      "type": "object",
+      "properties": {
+        "examiningDoctor": { "type": "string" },
+        "specialty": { "type": "string" },
+        "licenseNumber": { "type": "string" },
+        "contactInfo": { "type": "string" },
+        "signature": { "type": "boolean" },
+        "digitalSignatureInfo": { "type": "string" },
+        "dateTimeSigned": { "type": "string", "format": "date-time" },
+        "assistingStaff": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "administrativeData": {
+      "type": "object",
+      "properties": {
+        "billingCodes": { "type": "array", "items": { "type": "string" } },
+        "visitType": { "type": "string" },
+        "serviceLocation": { "type": "string" },
+        "encounterNumber": { "type": "string" },
+        "policyNotifications": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "feeInformation": { "type": "string" }
+      }
+    },
+    "telemedicineDetails": {
+      "type": "object",
+      "properties": {
+        "platformUsed": { "type": "string" },
+        "sessionID": { "type": "string" },
+        "connectionQuality": { "type": "string" },
+        "technicalIssuesNoted": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: adminnolook
+      POSTGRES_DB: omniapp
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
+
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    networks:
+      - omniapp
+
+  qdrant:
+    image: qdrant/qdrant:v1.13.4
+    container_name: qdrant
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    ports:
+      - 6333:6333 # tcp
+      - 6334:6334 # grpc
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+    networks:
+      - omniapp
+    restart: always
+
+volumes:
+  pgdata1:
+  qdrant_data:
+
+networks:
+  omniapp:
+    driver: bridge

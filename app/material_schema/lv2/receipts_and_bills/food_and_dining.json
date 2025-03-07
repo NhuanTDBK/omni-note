@@ -1,0 +1,179 @@
+{
+  "$defs": {
+    "MenuItem": {
+      "properties": {
+        "name": { "title": "Name", "type": "string" },
+        "quantity": { "title": "Quantity", "type": "number" },
+        "unit_price": { "title": "Unit Price", "type": "number" },
+        "total_amount": { "title": "Total Amount", "type": "number" },
+        "category": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }],
+          "default": null,
+          "title": "Category"
+        }
+      },
+      "required": ["name", "quantity", "unit_price", "total_amount"],
+      "title": "MenuItem",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "restaurant_name": { "title": "Restaurant Name", "type": "string" },
+    "address": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Address"
+    },
+    "phone_number": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Phone Number"
+    },
+    "website": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Website"
+    },
+    "social_media": {
+      "anyOf": [
+        { "additionalProperties": { "type": "string" }, "type": "object" },
+        { "type": "null" }
+      ],
+      "default": null,
+      "title": "Social Media"
+    },
+    "receipt_number": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Receipt Number"
+    },
+    "table_number": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Table Number"
+    },
+    "customer_count": {
+      "anyOf": [{ "type": "integer" }, { "type": "null" }],
+      "default": null,
+      "title": "Customer Count"
+    },
+    "server_name": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Server Name"
+    },
+    "cashier_name": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Cashier Name"
+    },
+    "date": { "format": "date-time", "title": "Date", "type": "string" },
+    "time_in": {
+      "anyOf": [
+        { "format": "date-time", "type": "string" },
+        { "type": "null" }
+      ],
+      "default": null,
+      "title": "Time In"
+    },
+    "time_out": {
+      "anyOf": [
+        { "format": "date-time", "type": "string" },
+        { "type": "null" }
+      ],
+      "default": null,
+      "title": "Time Out"
+    },
+    "printed_time": {
+      "anyOf": [
+        { "format": "date-time", "type": "string" },
+        { "type": "null" }
+      ],
+      "default": null,
+      "title": "Printed Time"
+    },
+    "items": {
+      "items": { "$ref": "#/$defs/MenuItem" },
+      "title": "Items",
+      "type": "array"
+    },
+    "subtotal": { "title": "Subtotal", "type": "number" },
+    "tax": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Tax"
+    },
+    "tax_percentage": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Tax Percentage"
+    },
+    "service_charge": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Service Charge"
+    },
+    "tip": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Tip"
+    },
+    "total_amount": { "title": "Total Amount", "type": "number" },
+    "currency": { "title": "Currency", "type": "string" },
+    "payment_method": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Payment Method"
+    },
+    "notes": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Notes"
+    },
+    "promotional_message": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Promotional Message"
+    },
+    "qr_code": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Qr Code"
+    },
+    "cuisine_type": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Cuisine Type"
+    },
+    "meal_type": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Meal Type"
+    },
+    "restaurant_category": {
+      "anyOf": [{ "type": "string" }, { "type": "null" }],
+      "default": null,
+      "title": "Restaurant Category"
+    },
+    "average_price_per_person": {
+      "anyOf": [{ "type": "number" }, { "type": "null" }],
+      "default": null,
+      "title": "Average Price Per Person"
+    },
+    "dining_duration_minutes": {
+      "anyOf": [{ "type": "integer" }, { "type": "null" }],
+      "default": null,
+      "title": "Dining Duration Minutes"
+    }
+  },
+  "required": [
+    "restaurant_name",
+    "date",
+    "items",
+    "subtotal",
+    "total_amount",
+    "currency"
+  ],
+  "title": "RestaurantReceipt",
+  "type": "object"
+}

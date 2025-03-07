@@ -1,0 +1,32 @@
+{
+  "category": [
+    "Text Notes",
+    "Receipts and Bills",
+    "Sketches and Drawings",
+    "Whiteboard Photos",
+    "Screenshots",
+    "Forms and Checklists",
+    "Medical Documents",
+    "Miscellaneous"
+  ],
+  "subcategories": [
+    "Text Notes>Idea Sparks",
+    "Text Notes>Meeting Notes",
+    "Receipts and Bills>Retail and Shopping",
+    "Receipts and Bills>Food and Dining",
+    "Receipts and Bills>Payment Schedule Document",
+    "Sketches and Drawings>UI/UX Wireframes and Mockups",
+    "Sketches and Drawings>Flowcharts and Process Diagrams",
+    "Sketches and Drawings>Engineering Schematics and Technical Drawings",
+    "Whiteboard Photos>Architecture Diagrams",
+    "Whiteboard Photos>Process Flows",
+    "Screenshots>Web Research/Online Content",
+    "Screenshots>Meeting Notes/Video Conference Screens",
+    "Screenshots>Application UI/Workflow Documentation",
+    "Screenshots>Error Messages/Troubleshooting Steps",
+    "Screenshots>Reference Material/Learning Resources",
+    "Forms and Checklists>Prescription Form",
+    "Forms and Checklists>Examination Form",
+    "Medical Documents>Laboratory Test Results"
+  ]
+}
