@@ -24,3 +24,4 @@ colpali-engine==0.3.8
 orjson==3.10.15
 selenium
 trafilatura
+pytest-mock

@@ -104,11 +104,6 @@
       "default": null,
       "title": "Phone Number"
     },
-    "website": {
-      "anyOf": [{ "type": "string" }, { "type": "null" }],
-      "default": null,
-      "title": "Website"
-    },
     "tax_identification": {
       "anyOf": [{ "type": "string" }, { "type": "null" }],
       "default": null,
@@ -194,16 +189,6 @@
       ],
       "default": null,
       "title": "Promotional Offers"
-    },
-    "barcode": {
-      "anyOf": [{ "type": "string" }, { "type": "null" }],
-      "default": null,
-      "title": "Barcode"
-    },
-    "qr_code": {
-      "anyOf": [{ "type": "string" }, { "type": "null" }],
-      "default": null,
-      "title": "Qr Code"
     },
     "store_category": {
       "default": "Grocery/Supermarket",
