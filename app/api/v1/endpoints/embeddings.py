@@ -8,10 +8,10 @@ from fastapi import APIRouter, UploadFile, Response
 from transformers.utils.import_utils import is_flash_attn_2_available
 from colpali_engine.models import ColQwen2, ColQwen2Processor
 
-from app.config import get_settings
+from app.configs import get_config
 
 router = APIRouter()
-config = get_settings()
+config = get_config()
 
 print(f"Loading model {config.EMBEDDING_MODEL}...")
 
@@ -32,7 +32,7 @@ if torch.cuda.is_available() and torch.cuda.is_bf16_supported():
 #     attn_implementation="flash_attention_2" if is_flash_attn_2_available() else None,
 # ).eval()
 
-processor = ColQwen2Processor.from_pretrained(config.EMBEDDING_MODEL)
+# processor = ColQwen2Processor.from_pretrained(config.EMBEDDING_MODEL)
 
 
 class VectorJsonResponse(Response):
