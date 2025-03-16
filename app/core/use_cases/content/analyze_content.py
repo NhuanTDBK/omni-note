@@ -1,6 +1,7 @@
-import json
 from typing import List
 from PIL import Image
+
+from transformers.image_utils import load_image
 from app.services.analyzer.text_analyzer import TextAnalyzer
 from app.services.analyzer.image_analyzer import ImageAnalyzer
 from app.services.ml.classifiers.llm_zeroshot_classification import (
@@ -78,6 +79,8 @@ class AnalyzeContentUseCase:
         summarization = ""
         logger.info("Processing content for analysis")
 
+        images = [load_image(image).resize((384, 384)) for image in images]
+
         # Process text content
         logger.info("Processing text content")
         for text in texts:
@@ -95,36 +98,38 @@ class AnalyzeContentUseCase:
             for category in lv1_categories
             if category.name not in ["Other", "Unknown"]
         ]
+        logger.info("Classifying content")
+        content_category_str = None
         if images:
             logger.info("Processing image content")
             # Do classification on text and images
-            logger.info("Classifying content")
-            content_category = await self.multimodal_classifier.classify_content(
+            content_category_str = await self.multimodal_classifier.classify_content(
                 categories=self.lv1, texts=texts, images=images
             )
         else:
-            content_category = await self.text_classifier.classify_content(
+            content_category_str = await self.text_classifier.classify_content(
                 texts=texts, categories=self.lv1
             )
-
+        logger.info(f"Content category: {content_category_str}")
         # check if content category has deeper level
-        list_children = self.template_repository.get_by_parent_id(content_category.id)
-        if list_children:
-            self.lv2 = [category.name for category in list_children]
-            content_category = await self.text_classifier.classify_content(
-                texts=texts, categories=self.lv2
-            )
-            template_info = self.template_repository.get_by_name(content_category)
-            if template_info:
-                schema = template_info.schema
-                metadata = {}
-                for image in images:
-                    metadata = await self.image_analyzer.analyze_image(
-                        image=image, schema=schema
-                    )
+        if content_category_str:
+            content_category = self.template_repository.get_by_name(content_category_str)
+            list_children = self.template_repository.get_by_parent_id(content_category.id)
+            if list_children:
+                self.lv2 = [category.name for category in list_children]
+                content_category = await self.text_classifier.classify_content(
+                    texts=texts, categories=self.lv2
+                )
+                template_info = self.template_repository.get_by_name(content_category)
+                if template_info:
+                    schema = template_info.schema
+                    for image in images:
+                        metadata = await self.image_analyzer.analyze_image(
+                            image=image, schema=schema
+                        )
 
         return AnalyzeResponse(
-            category=content_category,
+            category=content_category.name,
             metadata=metadata,
             summarization=summarization,
         )

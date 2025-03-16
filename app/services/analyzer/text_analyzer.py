@@ -1,6 +1,8 @@
 import re
 import asyncio
+
 from app.services.web.base_crawler import CrawlerService
+from app.services.web.crawler_service import AsyncRequestCrawlerService
 from app.services.ml.embedding.visual_colpali import VisualModelEmbedding
 from app.services.ml.summarization import ContentSummarizer
 from app.configs import Config
@@ -34,7 +36,7 @@ class TextAnalyzer:
 
     @staticmethod
     def from_config(config: Config):
-        web_crawler_service = CrawlerService.from_config(config)
+        web_crawler_service = AsyncRequestCrawlerService.from_config(config)
         # visual_model_embedding = VisualModelEmbedding.from_config(config)
         content_summarizer = ContentSummarizer.from_config(config)
         return TextAnalyzer(

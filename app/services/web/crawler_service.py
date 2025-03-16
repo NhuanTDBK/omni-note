@@ -20,6 +20,10 @@ class AsyncRequestCrawlerService(CrawlerService):
         # self.driver = get_driver_headless()
         self.web_client = httpx.AsyncClient()
 
+    @staticmethod
+    def from_config(config):
+        return AsyncRequestCrawlerService()
+
     def _get_random_user_agent(self) -> str:
         """Get a random user agent from the list"""
         return random.choice(self.user_agents)

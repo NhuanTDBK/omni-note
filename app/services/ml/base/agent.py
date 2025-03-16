@@ -1,5 +1,8 @@
 from openai import AsyncClient
+import json
 import tiktoken
+
+STRUCTURED_OUTPUT_PROVIDERS = ["openai", "localhost"]
 
 
 class BaseAgent(AsyncClient):
@@ -17,3 +20,28 @@ class BaseAgent(AsyncClient):
     def set_system_prompt(self, sp: str):
         self.sp = sp
         return self
+
+    def get_structured_output(self, model_id: str, schema: dict):
+        system_prompt = self.sp
+        is_support_structured_output = any(
+            [
+                provider in self.client.base_url.host
+                for provider in STRUCTURED_OUTPUT_PROVIDERS
+            ]
+        )
+        if is_support_structured_output:
+            response_format = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "response",
+                    "schema": schema,
+                },
+            }
+        else:
+            response_format = {"type": "json_object"}
+            system_prompt += (
+                "\n. Return in JSON format structure as below:\n"
+                + json.dumps(schema, indent=4)
+            )
+
+        return system_prompt, response_format

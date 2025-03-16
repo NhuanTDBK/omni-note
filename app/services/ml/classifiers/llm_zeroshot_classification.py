@@ -1,6 +1,6 @@
 import json
 import base64
-from io import BytesIO
+from PIL import Image
 from typing import List
 
 from openai import AsyncClient
@@ -35,15 +35,15 @@ class MultiModalClassificationAgent(BaseAgent):
         self,
         categories: List[str],
         texts: List[str] = [],
-        images: List[BytesIO] = [],
+        images: List[Image.Image] = [],
         temperature: float = 0.6,
         **kwargs,
-    ):
+    ) -> str:
 
         content = []
 
         for image in images:
-            encoded_image = base64.b64encode(BytesIO(image).read())
+            encoded_image = base64.b64encode(image.tobytes())
             decoded_image_text = encoded_image.decode("utf-8")
             content.append(
                 {
@@ -67,13 +67,30 @@ class MultiModalClassificationAgent(BaseAgent):
                 }
             )
 
+        sp, response_format = self.get_structured_output(
+            self.model_id,
+            schema={
+                "$defs": {
+                    "CategoryEnum": {
+                        "enum": categories,
+                        "title": "CategoryEnum",
+                        "type": "string",
+                    }
+                },
+                "properties": {"c": {"$ref": "#/$defs/CategoryEnum"}},
+                "required": ["c"],
+                "title": "Category",
+                "type": "object",
+            },
+        )            
+
         messages = [
             {
                 "role": "system",
                 "content": [
                     {
                         "type": "text",
-                        "text": self.sp,
+                        "text": sp,
                     }
                 ],
             },
@@ -85,25 +102,7 @@ class MultiModalClassificationAgent(BaseAgent):
             model=self.model_id,
             max_tokens=self.max_tokens,
             temperature=temperature,
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "category_response",
-                    "schema": {
-                        "$defs": {
-                            "CategoryEnum": {
-                                "enum": self.categories,
-                                "title": "CategoryEnum",
-                                "type": "string",
-                            }
-                        },
-                        "properties": {"c": {"$ref": "#/$defs/CategoryEnum"}},
-                        "required": ["c"],
-                        "title": "Category",
-                        "type": "object",
-                    },
-                },
-            },
+            response_format=response_format,
             **kwargs,
         )
         raw_response = response.choices[0].message.content
@@ -115,8 +114,10 @@ class MultiModalClassificationAgent(BaseAgent):
 class TextClassificationAgent(BaseAgent):
     def __init__(self, client, model_id):
         prompt_template = """
-            You are analyzing the content and classifying into one of these categories {}
-            Be concise and truthful" \
+            You are analyzing the content and classifying into one of these categories {categories}
+            Be concise and truthful
+            # Input
+            {input} \
         """
         super().__init__(
             client,
@@ -141,21 +142,32 @@ class TextClassificationAgent(BaseAgent):
         texts: List[str] = [],
         temperature: float = 0.6,
         **kwargs,
-    ):
+    ) -> str:
 
-        content = []
-        content.append(
-            {
-                "content": self.prompt_template.format(",".join(categories)),
-            }
+        content = self.prompt_template.format(
+            categories=",".join(categories), input=",".join(texts)
         )
-        for text in texts:
-            content.append({"content": text})
 
+        sp, response_format = self.get_structured_output(
+            self.model_id,
+            schema={
+                "$defs": {
+                    "CategoryEnum": {
+                        "enum": categories,
+                        "title": "CategoryEnum",
+                        "type": "string",
+                    }
+                },
+                "properties": {"c": {"$ref": "#/$defs/CategoryEnum"}},
+                "required": ["c"],
+                "title": "Category",
+                "type": "object",
+            },
+        )
         messages = [
             {
                 "role": "system",
-                "content": self.sp,
+                "content": sp,
             },
             {"role": "user", "content": content},
         ]
@@ -165,25 +177,7 @@ class TextClassificationAgent(BaseAgent):
             model=self.model_id,
             max_tokens=self.max_tokens,
             temperature=temperature,
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "category_response",
-                    "schema": {
-                        "$defs": {
-                            "CategoryEnum": {
-                                "enum": self.categories,
-                                "title": "CategoryEnum",
-                                "type": "string",
-                            }
-                        },
-                        "properties": {"c": {"$ref": "#/$defs/CategoryEnum"}},
-                        "required": ["c"],
-                        "title": "Category",
-                        "type": "object",
-                    },
-                },
-            },
+            response_format=response_format,
             **kwargs,
         )
         raw_response = response.choices[0].message.content
