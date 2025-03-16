@@ -4,7 +4,6 @@ from app.configs import get_config
 
 settings = get_config()
 
-print(settings.DATABASE_URL)
 engine = create_engine(settings.DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

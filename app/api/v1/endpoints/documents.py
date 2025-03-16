@@ -1,5 +1,6 @@
 from typing import List, Optional, Annotated
-
+from io import BytesIO
+from PIL import Image
 from fastapi import APIRouter, UploadFile, File, Form
 
 from app.core.use_cases.content.analyze_content import AnalyzeContentUseCase
@@ -23,7 +24,7 @@ async def extract_data(
     if not files:
         files = []
 
-    images = []
+    images: List[bytes] = []
     for file in files:
         content = await file.read()
         mimetype = file.content_type
@@ -31,6 +32,9 @@ async def extract_data(
         if "image" in mimetype:
             # Process image file
             images.append(content)
+
+    images = [Image.open(BytesIO(image)) for image in images]
+    # convert to PIL Image
 
     response = await content_usecase.process_content(
         texts=texts,

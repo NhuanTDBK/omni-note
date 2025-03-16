@@ -1,8 +1,7 @@
 from typing import List, Dict, Any
 import base64
 import json
-from io import BytesIO
-from pydantic import BaseModel
+from PIL import Image
 from openai import AsyncClient
 from app.services.ml.base import BaseAgent
 from app.configs import Config
@@ -72,22 +71,11 @@ class MultiModalJsonStructureExtractor(BaseAgent):
         self,
         schema: Dict[str, Any],
         texts: List[str],
-        images: List[str] = [],
+        images: List[Image.Image] = [],
         temperature: float = 0.6,
         **kwargs,
     ):
-        if isinstance(schema, dict):
-            response_format = {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "response",
-                    "schema": schema,
-                },
-            }
-        elif isinstance(schema, BaseModel):
-            response_format = schema
-        else:
-            raise ValueError("Schema must be a dict or a Pydantic model")
+        sp, response_format = self.get_structured_output(self.model_id, schema)
         content = []
         for text in texts:
             content.append(
@@ -97,7 +85,7 @@ class MultiModalJsonStructureExtractor(BaseAgent):
                 }
             )
         for image in images:
-            encoded_image = base64.b64encode(BytesIO(image).read())
+            encoded_image = base64.b64encode(image.tobytes())
             decoded_image_text = encoded_image.decode("utf-8")
             content.append(
                 {
@@ -120,7 +108,7 @@ class MultiModalJsonStructureExtractor(BaseAgent):
                 "content": [
                     {
                         "type": "text",
-                        "text": self.sp,
+                        "text": sp,
                     }
                 ],
             },
@@ -183,6 +171,7 @@ class OCRJsonStructureExtractor(BaseAgent):
         # Guideline
         - Be concise and truthful
         - Auto correct the text if needed
+        # Input: {content}
         """
         super().__init__(client, model_id, prompt_template)
         self.max_tokens = 1024
@@ -204,35 +193,13 @@ class OCRJsonStructureExtractor(BaseAgent):
         temperature: float = 0.6,
         **kwargs,
     ):
-        if isinstance(schema, dict):
-            response_format = {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "response",
-                    "schema": schema,
-                },
-            }
-        elif isinstance(schema, BaseModel):
-            response_format = schema
-        else:
-            raise ValueError("Schema must be a dict or a Pydantic model")
-        content = []
-        for text in texts:
-            content.append(
-                {
-                    "content": text,
-                }
-            )
-        content.append(
-            {
-                "content": self.prompt_template,
-            }
-        )
+        sp, response_format = self.get_structured_output(self.model_id, schema)
 
+        content = self.prompt_template.format(content=",".join(texts))
         messages = [
             {
                 "role": "system",
-                "content": self.sp,
+                "content": sp,
             },
             {"role": "user", "content": content},
         ]

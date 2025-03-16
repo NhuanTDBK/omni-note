@@ -47,12 +47,9 @@ class CrawlerService:
             return title, content
 
         except Exception as e:
+            raise e
             return f"Error fetching URL: {url}", f"An error occurred: {str(e)}"
 
     def clear_cache(self) -> None:
         """Clear the URL cache"""
         self.cache.clear()
-
-    @staticmethod
-    def from_config(config):
-        return CrawlerService()
