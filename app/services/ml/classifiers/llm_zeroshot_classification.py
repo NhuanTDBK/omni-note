@@ -1,6 +1,5 @@
 import json
 import base64
-from PIL import Image
 from typing import List
 
 from openai import AsyncClient
@@ -35,7 +34,7 @@ class MultiModalClassificationAgent(BaseAgent):
         self,
         categories: List[str],
         texts: List[str] = [],
-        images: List[Image.Image] = [],
+        images: List[bytes] = [],
         temperature: float = 0.6,
         **kwargs,
     ) -> str:
@@ -43,7 +42,7 @@ class MultiModalClassificationAgent(BaseAgent):
         content = []
 
         for image in images:
-            encoded_image = base64.b64encode(image.tobytes())
+            encoded_image = base64.b64encode(image)
             decoded_image_text = encoded_image.decode("utf-8")
             content.append(
                 {
@@ -82,7 +81,7 @@ class MultiModalClassificationAgent(BaseAgent):
                 "title": "Category",
                 "type": "object",
             },
-        )            
+        )
 
         messages = [
             {

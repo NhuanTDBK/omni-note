@@ -33,15 +33,14 @@ class BaseAgent(AsyncClient):
             response_format = {
                 "type": "json_schema",
                 "json_schema": {
-                    "name": "response",
+                    "name": "object_response",
                     "schema": schema,
                 },
             }
         else:
             response_format = {"type": "json_object"}
-            system_prompt += (
-                "\n. Return in JSON format structure as below:\n"
-                + json.dumps(schema, indent=4)
+            system_prompt += "\n. The JSON object must use the schema:\n" + json.dumps(
+                schema, indent=2
             )
 
         return system_prompt, response_format
