@@ -43,9 +43,9 @@ class PaddleOCRModel:
             # threshold=config.OCR_THRESHOLD,
         )
 
-    def predict(self, img: Image.Image) -> List[str]:
+    def predict(self, img: bytes) -> List[str]:
         result = self._paddle.ocr(
-            img.tobytes(), cls=False, det=True, rec=not self.is_external_detector
+            img, cls=False, det=True, rec=not self.is_external_detector
         )[:][:][0]
 
         if not self.is_external_detector:

@@ -1,7 +1,6 @@
 from typing import List, Dict, Any
 import base64
 import json
-from PIL import Image
 from openai import AsyncClient
 from app.services.ml.base import BaseAgent
 from app.configs import Config
@@ -49,10 +48,7 @@ class MultiModalJsonStructureExtractor(BaseAgent):
     def __init__(self, client, model_id: str):
         prompt_template = """
         # Instruction
-        Extract structured data from the provided text
-        # Guideline
-        - Be concise and truthful
-        - Auto correct the text if needed
+        Perform OCR in this image and return information as JSON format
         """
         super().__init__(client, model_id, prompt_template)
         self.max_tokens = 1024
@@ -71,7 +67,7 @@ class MultiModalJsonStructureExtractor(BaseAgent):
         self,
         schema: Dict[str, Any],
         texts: List[str],
-        images: List[Image.Image] = [],
+        images: List[bytes] = [],
         temperature: float = 0.6,
         **kwargs,
     ):
@@ -85,7 +81,7 @@ class MultiModalJsonStructureExtractor(BaseAgent):
                 }
             )
         for image in images:
-            encoded_image = base64.b64encode(image.tobytes())
+            encoded_image = base64.b64encode(image)
             decoded_image_text = encoded_image.decode("utf-8")
             content.append(
                 {
@@ -120,6 +116,9 @@ class MultiModalJsonStructureExtractor(BaseAgent):
             max_tokens=self.max_tokens,
             temperature=temperature,
             response_format=response_format,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,            
             **kwargs,
         )
         return json.loads(response.choices[0].message.content)
@@ -167,7 +166,7 @@ class OCRJsonStructureExtractor(BaseAgent):
     def __init__(self, client, model_id: str):
         prompt_template = """
         # Instruction
-        Extract structured data from the provided text
+        Extract structured data from the provided image
         # Guideline
         - Be concise and truthful
         - Auto correct the text if needed
@@ -203,6 +202,7 @@ class OCRJsonStructureExtractor(BaseAgent):
             },
             {"role": "user", "content": content},
         ]
+
         response = await self.client.beta.chat.completions.parse(
             messages=messages,
             model=self.model_id,

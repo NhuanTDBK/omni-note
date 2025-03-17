@@ -15,7 +15,7 @@ content_usecase = AnalyzeContentUseCase.from_config(config=config)
 
 @router.post("/extract_data")
 async def extract_data(
-    texts: List[str] = Form(...),
+    texts: Optional[List[str]] = [],
     files: Annotated[List[UploadFile], File()] = None,
     lang: Optional[str] = "en_us",
 ):
