@@ -1,7 +1,7 @@
 from PIL import Image
 from app.services.ml.ocr.paddle_paddle import PaddleOCRModel
 from app.services.ml.extractors.json_structure import (
-    OCRJsonStructureExtractor,
+    JsonStructureExtractor,
     MultiModalJsonStructureExtractor,
 )
 from app.configs import Config
@@ -11,7 +11,7 @@ class PaddleOCRImageAnalyzer:
     def __init__(
         self,
         ocr_service: PaddleOCRModel = None,
-        structure_extractor_service: OCRJsonStructureExtractor = None,
+        structure_extractor_service: JsonStructureExtractor = None,
     ):
         self.ocr_service = ocr_service
         self.structure_extractor_service = structure_extractor_service
@@ -19,7 +19,7 @@ class PaddleOCRImageAnalyzer:
     @staticmethod
     def from_config(config: Config):
         ocr_service = PaddleOCRModel.from_config(config)
-        structure_extractor_service = OCRJsonStructureExtractor.from_config(config)
+        structure_extractor_service = JsonStructureExtractor.from_config(config)
         return PaddleOCRImageAnalyzer(
             ocr_service=ocr_service,
             structure_extractor_service=structure_extractor_service,
