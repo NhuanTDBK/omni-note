@@ -118,13 +118,13 @@ class MultiModalJsonStructureExtractor(BaseAgent):
             response_format=response_format,
             top_p=1,
             frequency_penalty=0,
-            presence_penalty=0,            
+            presence_penalty=0,
             **kwargs,
         )
         return json.loads(response.choices[0].message.content)
 
 
-class OCRJsonStructureExtractor(BaseAgent):
+class JsonStructureExtractor(BaseAgent):
     """
     A class for extracting structured metadata from text and images using an AI model.
     This class extends BaseAgent and provides functionality to extract structured data
@@ -152,7 +152,6 @@ class OCRJsonStructureExtractor(BaseAgent):
         Extracts structured metadata from the provided texts and images.
         Parameters:
             texts (List[str]): List of text inputs to process
-            images_path (List[str], optional): List of paths to image files
             temperature (float, optional): Temperature parameter for model response (default: 0.6)
             **kwargs: Additional arguments to pass to the model
         Returns:
@@ -166,7 +165,7 @@ class OCRJsonStructureExtractor(BaseAgent):
     def __init__(self, client, model_id: str):
         prompt_template = """
         # Instruction
-        Extract structured data from the provided image
+        Extract structured data from the provided text
         # Guideline
         - Be concise and truthful
         - Auto correct the text if needed
@@ -179,11 +178,11 @@ class OCRJsonStructureExtractor(BaseAgent):
     @staticmethod
     def from_config(config: Config):
         client = AsyncClient(
-            api_key=config.VISUAL_AGENT_EXTRACTOR_LLM_API_KEY,
-            base_url=config.VISUAL_AGENT_EXTRACTOR_LLM_URL,
+            api_key=config.TEXT_AGENT_EXTRACTOR_LLM_API_KEY,
+            base_url=config.TEXT_AGENT_EXTRACTOR_LLM_URL,
         )
-        model_id = config.VISUAL_AGENT_EXTRACTOR_LLM_MODEL
-        return OCRJsonStructureExtractor(client, model_id)
+        model_id = config.TEXT_AGENT_EXTRACTOR_LLM_MODEL
+        return JsonStructureExtractor(client, model_id)
 
     async def extract_metadata(
         self,
