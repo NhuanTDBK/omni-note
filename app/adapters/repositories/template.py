@@ -42,3 +42,28 @@ class TemplateRepository:
 
     def get_by_parent_id(self, parent_id: int) -> List[Template]:
         return self.db.query(Template).filter(Template.parent_id == parent_id).all()
+
+    def create(self, template: Template) -> Template:
+        self.db.add(template)
+        self.db.commit()
+        self.db.refresh(template)
+        return template
+
+    def update(self, template: Template) -> Template:
+        existing_template = self.get_by_id(template.id)
+        if not existing_template:
+            return None
+        for key, value in template.__dict__.items():
+            if key != '_sa_instance_state':
+                setattr(existing_template, key, value)
+        self.db.commit()
+        self.db.refresh(existing_template)
+        return existing_template
+
+    def delete(self, template_id: int) -> bool:
+        template = self.get_by_id(template_id)
+        if not template:
+            return False
+        self.db.delete(template)
+        self.db.commit()
+        return True
