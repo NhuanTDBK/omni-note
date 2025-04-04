@@ -4,9 +4,12 @@ from pydantic import BaseModel, Field
 
 
 class MaterialBase(BaseModel):
+    type_id: int = Field()
     title: str = Field(..., min_length=1, max_length=255)
     content: str = Field(..., min_length=1)
     tags: Optional[List[str]] = []
+    metadata_data: Optional[dict] = {}
+
 
 
 class MaterialCreate(MaterialBase):
@@ -18,14 +21,8 @@ class MaterialUpdate(MaterialBase):
     content: Optional[str] = Field(None, min_length=1)
 
 
-class MaterialResponse(MaterialBase):
-    id: str
-    user_id: str
-    created_at: datetime
-    updated_at: Optional[datetime]
-
-    class Config:
-        from_attributes = True
+class MaterialResponse(BaseModel):
+    status: bool
 
 
 class MaterialListResponse(BaseModel):
@@ -34,7 +31,7 @@ class MaterialListResponse(BaseModel):
 
 
 class ExtractDataResponse(BaseModel):
-    summary: str
-    keywords: List[str]
-    hyperlinks: Optional[List[str]] = []
-    content: dict
+    category: str
+    summarization: str = ""
+    metadata: dict = {}
+    user_id: str = ""

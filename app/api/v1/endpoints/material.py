@@ -3,8 +3,10 @@ from io import BytesIO
 from PIL import Image
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, status
 from sqlalchemy.orm import Session
+from uuid import UUID
 
 from app.core.use_cases.content.analyze_content import AnalyzeContentUseCase
+from app.core.use_cases.search.search_content import SearchContentUseCase
 from app.configs import get_config
 
 from app.adapters.repositories.material import MaterialRepository
@@ -21,11 +23,10 @@ from app.api.v1.schema.material import (
 router = APIRouter()
 config = get_config()
 content_usecase = AnalyzeContentUseCase.from_config(config=config)
+search_usecase = SearchContentUseCase.from_config(config=config)
 
 
-@router.post(
-    "/materials/", response_model=MaterialResponse, status_code=status.HTTP_201_CREATED
-)
+@router.post("/", response_model=MaterialResponse, status_code=status.HTTP_201_CREATED)
 async def create_material(
     material: MaterialCreate,
     current_user: str = Depends(get_current_user),
@@ -41,15 +42,16 @@ async def create_material(
     new_material = MaterialContent(
         user_id=current_user,
         title=material.title,
-        content=material.content,
-        tags=material.tags,
+        content=material.content.encode("utf-8") if material.content else None,
+        metadata_data=material.metadata_data if material.metadata_data else None,
     )
-    return repo.create(new_material)
+    inserted_material = repo.create(new_material)
+    return MaterialResponse(status=True)
 
 
-@router.get("/materials/{material_id}", response_model=MaterialResponse)
+@router.get("/{material_id}", response_model=MaterialResponse)
 async def get_material(
-    material_id: str,
+    material_id: UUID,
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -67,7 +69,7 @@ async def get_material(
     return material
 
 
-@router.get("/materials/", response_model=MaterialListResponse)
+@router.get("/all/", response_model=MaterialListResponse)
 async def list_materials(
     current_user: str = Depends(get_current_user), db: Session = Depends(get_db)
 ):
@@ -76,9 +78,9 @@ async def list_materials(
     return MaterialListResponse(total=len(items), items=items)
 
 
-@router.put("/materials/{material_id}", response_model=MaterialResponse)
+@router.put("/{material_id}", response_model=MaterialResponse)
 async def update_material(
-    material_id: str,
+    material_id: UUID,
     material: MaterialUpdate,
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -107,9 +109,9 @@ async def update_material(
     return repo.update(existing)
 
 
-@router.delete("/materials/{material_id}")
+@router.delete("/{material_id}")
 async def delete_material(
-    material_id: str,
+    material_id: UUID,
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -161,14 +163,18 @@ async def extract_data(
         extract_hyperlinks=True,
     )
 
-    # # Store the extracted content
-    # repo = MaterialRepository(db)
-    # material = MaterialContent(
-    #     user_id=current_user,
-    #     title=response.get("summary", "Untitled"),
-    #     content=str(response),
-    #     tags=response.get("keywords", [])
-    # )
-    # repo.create(material)
+    return ExtractDataResponse(
+        category=response.category,
+        summarization=response.summarization,
+        metadata=response.metadata,
+        user_id=current_user,
+    )
 
-    return response
+
+@router.post("/search")
+async def search(
+    query: str,
+    limit: int = 10,
+):
+    results = await search_usecase.search(query=query, limit=limit)
+    return results

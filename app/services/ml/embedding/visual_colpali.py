@@ -2,8 +2,11 @@ from typing import List
 from PIL import Image
 
 import torch
+import numpy as np
 from transformers.utils.import_utils import is_flash_attn_2_available
 from colpali_engine.models import ColQwen2, ColQwen2Processor
+
+from app.configs import Config
 
 
 class VisualModelEmbedding:
@@ -28,15 +31,23 @@ class VisualModelEmbedding:
             ),
         ).eval()
 
-        self.processor = ColQwen2Processor.from_pretrained(model_id)
+        self.processor = ColQwen2Processor.from_pretrained(model_id, use_fast=False)
+        self.device = device
 
-    def get_image_embedding(self, images: List[Image.Image]):
+    @classmethod
+    def from_config(cls, config: Config):
+        model_id = config.EMBEDDING_MODEL
+        device = None
+        torch_dtype = None
+        return cls(model_id=model_id, device=device, torch_dtype=torch_dtype)
+
+    def get_images_embedding(self, images: List[Image.Image]) -> np.ndarray:
         batch_images = self.processor.process_images(images).to(self.device)
         with torch.no_grad():
             image_embeddings = self.model(**batch_images).detach().cpu().numpy()
             return image_embeddings
 
-    def get_text_embedding(self, queries: List[str]):
+    def get_texts_embedding(self, queries: List[str]) -> np.ndarray:
         batch_queries = self.processor.process_queries(queries).to(self.device)
         with torch.no_grad():
             query_embeddings = self.model(**batch_queries).detach().cpu().numpy()

@@ -1,5 +1,6 @@
 from typing import List
 from sqlalchemy.orm import Session
+from qdrant_client import QdrantClient, models
 from app.adapters.persistance.template import Template
 
 

@@ -10,6 +10,7 @@ from sqlalchemy import (
     Integer,
     LargeBinary,
     SmallInteger,
+    UUID,
 )
 
 from .base import Base
@@ -19,7 +20,7 @@ from .user import User
 
 class MaterialContent(Base):
     __tablename__ = "contents"
-    __table_args__ = {'schema': 'app'}
+    __table_args__ = {"schema": "app"}
     id = Column(String, primary_key=True, default=uuid.uuid4)
     type_id = Column(Integer, ForeignKey(Template.id))
     user_id = Column(String, ForeignKey(User.user_id))
