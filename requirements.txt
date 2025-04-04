@@ -5,7 +5,7 @@ sqlalchemy==2.0.23
 python-jose==3.3.0
 passlib==1.7.4
 python-dotenv==1.0.0
-qdrant-client==1.6.4
+qdrant-client==1.13.3
 mysql-connector-python==8.2.0
 pydantic~=2.7.2
 sentence-transformers==2.2.2
@@ -25,3 +25,5 @@ orjson==3.10.15
 selenium
 trafilatura
 pytest-mock
+smolagents
+smolagents[litellm]
